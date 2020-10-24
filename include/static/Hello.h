@@ -17,7 +17,10 @@ public:
     std::string archive;
     std::string logfile;
     std::string *channels;
+    bool hasYDL;
+    bool hasFF;
 
+    // Mugo constructor
     Mugo(std::string file)
     {
         YAML::Node config = YAML::LoadFile(file);
@@ -41,9 +44,31 @@ public:
         {
             logfile = config["logfile"].as<std::string>();
         };
-    }
 
-    void download_new();
+        // check if YDL exists
+        int ydl, ff;
+        ydl = (int)system("which youtube-dl");
+        ff = (int)system("which ffmpeg");
+
+        if (ydl == 0)
+        {
+            hasYDL = true;
+        }
+        else
+        {
+            hasYDL = false;
+        }
+
+        // check if ffmpeg exists
+        if (ff == 0)
+        {
+            hasFF = true;
+        }
+        else
+        {
+            hasFF = false;
+        }
+    }
 };
 
 int ext_number(std::string dir, std::string extension);

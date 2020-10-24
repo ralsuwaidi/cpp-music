@@ -10,7 +10,7 @@ int main()
     Mugo test("config.yaml");
     cout << "Number of .a in build is " << test.channels[0] << endl;
 
-    test.download_new();
+    cout << test.hasYDL;
 
     return 0;
 }
