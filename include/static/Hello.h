@@ -69,6 +69,8 @@ public:
             hasFF = false;
         }
     }
+
+    void yt_download(std::string url);
 };
 
 int ext_number(std::string dir, std::string extension);
