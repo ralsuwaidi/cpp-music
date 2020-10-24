@@ -19,6 +19,7 @@ public:
     std::string *channels;
     bool hasYDL;
     bool hasFF;
+    std::string download_dir;
 
     // Mugo constructor
     Mugo(std::string file)
@@ -38,7 +39,13 @@ public:
         if (config["archive"])
         {
             archive = config["archive"].as<std::string>();
-        };
+        }
+
+        if (config["download_dir"])
+        {
+            download_dir = config["download_dir"].as<std::string>();
+        }
+        
 
         if (config["logfile"])
         {

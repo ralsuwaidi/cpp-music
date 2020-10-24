@@ -17,9 +17,10 @@ void Mugo::yt_download(std::string url)
     myarchive =this->archive;
     
     if(myarchive.empty()){
-        std::cout << "you dont have archive";
+        std::cout << "you dont have archive, saving to archive.txt" << std::endl;
+        this->archive = std::string("archive.txt");
     } else{
-        std::cout << "you have archive";
+        std::cout << "you have archive, saving to " << this->archive << std::endl;
     };
 
     command << R"(youtube-dl --add-metadata \
@@ -29,7 +30,7 @@ void Mugo::yt_download(std::string url)
        --no-post-overwrites \
        -ciwx \
        --audio-format mp3 \
-       -o "%(title)s.%(ext)s" )" +
+       -o ")" + this->download_dir + R"(%(title)s.%(ext)s" )" +
                    url + R"(;
         test $? -gt 128 && break;)";
 
