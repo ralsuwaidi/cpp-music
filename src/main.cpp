@@ -1,28 +1,48 @@
 #include <iostream>
+#include <fstream>
 
 #include "static/Hello.h"
-#include "yaml-cpp/yaml.h"
+#include "argh.h"
 
 using namespace std;
 
-int main()
+int main(int argc, char *argv[])
 {
-    Mugo test("config.yaml");
-    cout << "Number of .a in build is " << test.channels[0] << endl;
+    string config_file = "config.yaml";
+    // get configuration from yaml file
+    Mugo config(config_file);
 
-    if (test.hasYDL)
+    // parse input
+    if (argc > 0)
     {
-        cout << "you have YDL" << endl;
+        argh::parser cmdl(argv);
+
+        if (cmdl[{"-v", "--verbose"}])
+            std::cout << "Verbose, I am.\n";
+
+        if (cmdl[{"-c", "--channels"}])
+            std::cout << "Number of channels are: " << config.channel_num << endl;
+
+        if (cmdl[{"-s", "--songs"}])
+        {
+            std::ifstream myfile(config.archive);
+
+            // new lines will be skipped unless we stop it from happening:
+            myfile.unsetf(std::ios_base::skipws);
+
+            // count the newlines with an algorithm specialized for counting:
+            unsigned line_count = std::count(
+                std::istream_iterator<char>(myfile),
+                std::istream_iterator<char>(),
+                '\n');
+
+            std::cout << "Archived songs: " << line_count << "\n";
+        }
     }
 
-    if (test.hasFF)
-    {
-        cout << "you have FFMPEG" << endl;
-    }
 
-
-    test.yt_download("https://www.youtube.com/watch?v=-G8oXE3Q_dc");
+    // test.yt_download("https://www.youtube.com/watch?v=-G8oXE3Q_dc");
     // cout << test.archive;
 
-    return 0;
+    return EXIT_SUCCESS;
 }

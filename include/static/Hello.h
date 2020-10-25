@@ -10,6 +10,8 @@ public:
     void print();
 };
 
+
+
 class Mugo
 {
 public:
@@ -54,8 +56,8 @@ public:
 
         // check if YDL exists
         int ydl, ff;
-        ydl = (int)system("which youtube-dl");
-        ff = (int)system("which ffmpeg");
+        ydl = (int)system("which youtube-dl > /dev/null 2>&1");
+        ff = (int)system("which ffmpeg > /dev/null 2>&1");
 
         if (ydl == 0)
         {
@@ -80,6 +82,5 @@ public:
     void yt_download(std::string url);
 };
 
-int ext_number(std::string dir, std::string extension);
 
 #endif
