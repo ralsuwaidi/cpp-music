@@ -40,8 +40,10 @@ int main(int argc, char *argv[])
         }
     }
 
+    config.downloader("yeess");
 
-    // test.yt_download("https://www.youtube.com/watch?v=-G8oXE3Q_dc");
+
+    // test.downloader("https://www.youtube.com/watch?v=-G8oXE3Q_dc");
     // cout << test.archive;
 
     return EXIT_SUCCESS;

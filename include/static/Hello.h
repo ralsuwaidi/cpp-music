@@ -79,7 +79,7 @@ public:
         }
     }
 
-    void yt_download(std::string url);
+    void downloader(std::string url);
 };
 
 
