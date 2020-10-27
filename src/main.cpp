@@ -13,12 +13,9 @@ int main(int argc, char *argv[])
     Mugo config(config_file);
 
     // parse input
-    if (argc > 0)
+    if (argc > 1)
     {
         argh::parser cmdl(argv);
-
-        if (cmdl[{"-v", "--verbose"}])
-            std::cout << "Verbose, I am.\n";
 
         if (cmdl[{"-c", "--channels"}])
             std::cout << "Number of channels are: " << config.channel_num << endl;
@@ -39,8 +36,10 @@ int main(int argc, char *argv[])
             std::cout << "Archived songs: " << line_count << "\n";
         }
     }
-
-    config.downloader("yeess");
+    else
+    {
+        config.downloader("");
+    }
 
 
     // test.downloader("https://www.youtube.com/watch?v=-G8oXE3Q_dc");

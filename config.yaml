@@ -20,3 +20,6 @@ channels:
 archive: /home/rashed/dev/cpp-music/music/download.txt
 logfile: ~/.local/music.log
 download_dir: /home/rashed/dev/cpp-music/music/
+post_download_commands:
+    - docker image ls
+    - docker container ls

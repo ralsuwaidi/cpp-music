@@ -11,9 +11,16 @@ void Hello::print()
 void Mugo::downloader(std::string url)
 {
 
-    std::stringstream command;
     std::vector<std::string> download_list;
-    download_list.assign(this->channels, this->channels + this->channel_num);
+
+    if (!url.empty())
+    {
+        download_list.insert(download_list.begin(),url);
+    }
+    else
+    {
+        download_list.assign(this->channels, this->channels + this->channel_num);
+    }
 
     if (this->archive.empty())
     {
@@ -25,14 +32,10 @@ void Mugo::downloader(std::string url)
         std::cout << "you have archive, saving to " << this->archive << std::endl;
     };
 
-    if (!url.empty())
-    {
-        download_list.resize(1);
-        download_list[0] = {url};
-    }
-
     for (int i = 0; i < download_list.size(); i++)
     {
+        std::stringstream command;
+
         command << R"(youtube-dl --add-metadata \
        --metadata-from-title "%(artist)s - %(title)s" \
        --embed-thumbnail \
@@ -43,12 +46,22 @@ void Mugo::downloader(std::string url)
        --audio-format mp3 \
        -o ")" + this->download_dir +
                        R"(%(title)s.%(ext)s" )" +
-                       url + R"(;
+                       download_list[i] + R"(;
         test $? -gt 128 && break;)";
 
         char str_cmd[command.str().size() + 1];
         strcpy(str_cmd, command.str().c_str());
 
-        // system(str_cmd);
+        system(str_cmd);
     }
+
+    if(this->post_download_commands){
+
+        for (int i = 0; i < this->post_download_commands->size(); i++)
+        {
+            system(this->post_download_commands[i].c_str());
+        }
+        
+    }
+
 }

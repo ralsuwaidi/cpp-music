@@ -10,8 +10,6 @@ public:
     void print();
 };
 
-
-
 class Mugo
 {
 public:
@@ -19,6 +17,7 @@ public:
     std::string archive;
     std::string logfile;
     std::string *channels;
+    std::string *post_download_commands;
     bool hasYDL;
     bool hasFF;
     std::string download_dir;
@@ -38,6 +37,17 @@ public:
             };
         };
 
+        if (config["post_download_commands"])
+        {
+
+            int command_size = config["post_download_commands"].size();
+            post_download_commands = new std::string[command_size];
+            for (int i = 0; i < command_size; i++)
+            {
+                post_download_commands[i] = config["post_download_commands"][i].as<std::string>();
+            };
+        };
+
         if (config["archive"])
         {
             archive = config["archive"].as<std::string>();
@@ -47,7 +57,6 @@ public:
         {
             download_dir = config["download_dir"].as<std::string>();
         }
-        
 
         if (config["logfile"])
         {
@@ -81,6 +90,5 @@ public:
 
     void downloader(std::string url);
 };
-
 
 #endif
