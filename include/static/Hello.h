@@ -14,6 +14,7 @@ class Mugo
 {
 public:
     int channel_num;
+    int command_num;
     std::string archive;
     std::string logfile;
     std::string *channels;
@@ -40,13 +41,13 @@ public:
         if (config["post_download_commands"])
         {
 
-            int command_size = config["post_download_commands"].size();
-            post_download_commands = new std::string[command_size];
-            for (int i = 0; i < command_size; i++)
+            command_num = config["post_download_commands"].size();
+            post_download_commands = new std::string[command_num];
+            for (int i = 0; i < command_num; i++)
             {
                 post_download_commands[i] = config["post_download_commands"][i].as<std::string>();
-            };
-        };
+            }
+        }
 
         if (config["archive"])
         {
@@ -56,6 +57,11 @@ public:
         if (config["download_dir"])
         {
             download_dir = config["download_dir"].as<std::string>();
+
+            if (!(download_dir.back() == '/'))
+            {
+                download_dir.append("/");
+            }
         }
 
         if (config["logfile"])

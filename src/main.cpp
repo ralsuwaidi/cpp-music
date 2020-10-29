@@ -35,15 +35,32 @@ int main(int argc, char *argv[])
 
             std::cout << "Archived songs: " << line_count << "\n";
         }
+
+        // clean up
+        if (cmdl[{"-C", "--clean"}])
+        {
+            if (config.download_dir.empty())
+            {
+                cout << "No download dir found in config file" << endl;
+            }
+            else
+            {
+
+                string ext_delete[4] = {"*.tmp", "*.webm", "*.jpg", "*.webp"};
+
+
+                for (const string &ext : ext_delete)
+                {
+                    string delete_command = "rm -r " + config.download_dir + ext + " > /dev/null 2>&1";
+                    system(delete_command.c_str());
+                }
+            }
+        }
     }
     else
     {
         config.downloader("");
     }
-
-
-    // test.downloader("https://www.youtube.com/watch?v=-G8oXE3Q_dc");
-    // cout << test.archive;
 
     return EXIT_SUCCESS;
 }
