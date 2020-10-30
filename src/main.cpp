@@ -14,10 +14,10 @@ int main(int argc, char *argv[])
     // exit if no config file found
     if (!find_file(config_file))
     {
-        cout << "no config file found, please create a 'config.yaml' and run this command in the same dir";
+        cout << "no config file found, please create a 'config.yaml' and run this command in the same dir" << endl;;
         return EXIT_SUCCESS;
     }
-    
+
     // get configuration from yaml file
     Mugo config(config_file);
 
@@ -29,12 +29,18 @@ int main(int argc, char *argv[])
         if (cmdl[{"-c", "--channels"}])
             std::cout << "Number of channels are: " << config.channel_num << endl;
 
-        
         if (cmdl[{"-s", "--songs"}])
         {
-            // get number of songs
-            int line_count = number_of_lines(config.archive);
-            std::cout << "Archived songs: " << line_count << "\n";
+            if (!config.archive.empty())
+            {
+                // get number of songs
+                int line_count = number_of_lines(config.archive);
+                std::cout << "Archived songs: " << line_count << "\n";
+            }
+            else
+            {
+                cout << "no config file found" << endl;
+            }
         }
 
         // clean up
@@ -48,8 +54,8 @@ int main(int argc, char *argv[])
             else
             {
 
+                // extension files to delete
                 string ext_delete[4] = {"*.tmp", "*.webm", "*.jpg", "*.webp"};
-
 
                 for (const string &ext : ext_delete)
                 {
@@ -58,10 +64,20 @@ int main(int argc, char *argv[])
                 }
             }
         }
+
+        if(cmdl[{"-p", "--post_download"}]){
+            if(!(config.post_download_commands->empty())){
+                post_download_cmd(config.post_download_commands, config.command_num, config.logfile);
+            }else {
+                cout << "No post download command found in config" << endl;
+                return EXIT_SUCCESS;
+            }
+
+        }
     }
     else
     {
-        config.downloader("");
+        // config.downloader("");
     }
 
     return EXIT_SUCCESS;

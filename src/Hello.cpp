@@ -63,23 +63,12 @@ void Mugo::downloader(std::string url)
 
         // run command
         system(str_cmd);
+
+        // post download command
+        post_download_cmd(this->post_download_commands, this->command_num, this->logfile);
     }
 
-    // run post download commands
-    if (this->post_download_commands)
-    {
-        std::vector<std::string> command_list;
 
-        command_list.assign(this->post_download_commands, this->post_download_commands + this->command_num);
-
-        for (int i = 0; i < command_list.size(); i++)
-        {
-            std::cout << "running command: " << command_list[i].c_str() << std::endl;
-
-            std::string command_with_log = command_list[i] + " >> " + (std::string)this->logfile;
-            system(command_with_log.c_str());
-        }
-    }
 }
 
 int number_of_lines(std::string file)
@@ -134,5 +123,30 @@ bool find_file(std::string file)
     else //if file is not present....
     {
         return false;
+    }
+}
+
+
+void post_download_cmd(std::string* commands, int command_num, std::string logfile){
+    // run post download commands
+    if (commands)
+    {
+        std::vector<std::string> command_list;
+
+        command_list.assign(commands, commands + command_num);
+
+        for (int i = 0; i < command_list.size(); i++)
+        {
+            std::cout << "running command: " << command_list[i].c_str() << std::endl;
+
+            std::string command_with_log = command_list[i] + " >> " + logfile;
+            system(command_with_log.c_str());
+        }
+
+        if(!logfile.empty()){
+            std::cout << "log saved to " << logfile << std::endl;
+        }
+    } else {
+        std::cout << "No post download commands found" << std::endl;
     }
 }

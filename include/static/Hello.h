@@ -102,4 +102,6 @@ int number_of_lines(std::string file);
 
 bool find_file(std::string file);
 
+void post_download_cmd(std::string* commands, int command_num, std::string logfile);
+
 #endif
