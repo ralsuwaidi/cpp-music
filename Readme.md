@@ -30,3 +30,7 @@ post_download_commands:
     - docker exec -t beets /bin/bash -c "beet ls -p added- | head -100 > /music/playlist/new.m3u; sed -i -e 's/^/\/data/' /music/playlist/new.m3u"
 ```
 
+## Config File
+
+Input
+

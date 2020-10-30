@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include "yaml-cpp/yaml.h"
+#include <dirent.h>
 
 class Hello
 {
@@ -96,5 +97,9 @@ public:
 
     void downloader(std::string url);
 };
+
+int number_of_lines(std::string file);
+
+bool find_file(std::string file);
 
 #endif

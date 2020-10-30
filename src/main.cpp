@@ -8,7 +8,16 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+
     string config_file = "config.yaml";
+
+    // exit if no config file found
+    if (!find_file(config_file))
+    {
+        cout << "no config file found, please create a 'config.yaml' and run this command in the same dir";
+        return EXIT_SUCCESS;
+    }
+    
     // get configuration from yaml file
     Mugo config(config_file);
 
@@ -20,19 +29,11 @@ int main(int argc, char *argv[])
         if (cmdl[{"-c", "--channels"}])
             std::cout << "Number of channels are: " << config.channel_num << endl;
 
+        
         if (cmdl[{"-s", "--songs"}])
         {
-            std::ifstream myfile(config.archive);
-
-            // new lines will be skipped unless we stop it from happening:
-            myfile.unsetf(std::ios_base::skipws);
-
-            // count the newlines with an algorithm specialized for counting:
-            unsigned line_count = std::count(
-                std::istream_iterator<char>(myfile),
-                std::istream_iterator<char>(),
-                '\n');
-
+            // get number of songs
+            int line_count = number_of_lines(config.archive);
             std::cout << "Archived songs: " << line_count << "\n";
         }
 
@@ -42,6 +43,7 @@ int main(int argc, char *argv[])
             if (config.download_dir.empty())
             {
                 cout << "No download dir found in config file" << endl;
+                return EXIT_SUCCESS;
             }
             else
             {

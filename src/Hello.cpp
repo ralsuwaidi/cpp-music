@@ -2,6 +2,7 @@
 
 #include "static/Hello.h"
 #include "yaml-cpp/yaml.h"
+#include <fstream>
 
 void Hello::print()
 {
@@ -34,6 +35,7 @@ void Mugo::downloader(std::string url)
         std::cout << "you have archive, saving to " << this->archive << std::endl;
     };
 
+    // run download command
     for (int i = 0; i < download_list.size(); i++)
     {
         // ytdl command
@@ -57,18 +59,18 @@ void Mugo::downloader(std::string url)
         strcpy(str_cmd, command.str().c_str());
 
         // info
-        std::cout << "downloading " << i << "/" << download_list.size() << std::endl;
+        std::cout << "downloading " << i + 1 << "/" << download_list.size() << std::endl;
 
         // run command
         system(str_cmd);
     }
 
+    // run post download commands
     if (this->post_download_commands)
     {
         std::vector<std::string> command_list;
 
         command_list.assign(this->post_download_commands, this->post_download_commands + this->command_num);
-        // std::cout << this->command_num << std::endl;
 
         for (int i = 0; i < command_list.size(); i++)
         {
@@ -77,5 +79,60 @@ void Mugo::downloader(std::string url)
             std::string command_with_log = command_list[i] + " >> " + (std::string)this->logfile;
             system(command_with_log.c_str());
         }
+    }
+}
+
+int number_of_lines(std::string file)
+{
+    std::ifstream myfile(file);
+
+    // new lines will be skipped unless we stop it from happening:
+    myfile.unsetf(std::ios_base::skipws);
+
+    // count the newlines with an algorithm specialized for counting:
+    unsigned line_count = std::count(
+        std::istream_iterator<char>(myfile),
+        std::istream_iterator<char>(),
+        '\n');
+
+    return line_count;
+}
+
+bool find_file(std::string file)
+{
+
+    DIR *directory;   // creating pointer of type dirent
+    struct dirent *x; // pointer represent directory stream
+    // std::cout << "Please enter file name with its extension" << std::endl;
+    // std::string s;       //declaring string variable
+    // std::cin >> s;       // taking string as input or file name with input
+    
+    bool result = false; //declaring string variable and assign it to false.
+    if ((directory = opendir(".")) != NULL)
+    { // check if directory  open
+
+        while ((x = readdir(directory)) != NULL)
+        {
+
+            {
+
+                if (file == x->d_name)
+                {
+                    result = true; //if file found then  assign  result to false.
+
+                    break; // break the loop if file found.
+                }
+            }
+        }
+
+        closedir(directory); //close directory....
+    }
+    if (result) // if file is present then....
+    {
+        return true;
+    }
+    else //if file is not present....
+    {
+        return false;
     }
 }
