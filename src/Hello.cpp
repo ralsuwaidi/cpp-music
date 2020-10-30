@@ -12,9 +12,9 @@ void Hello::print()
 void Mugo::downloader(std::string url)
 {
 
+    // list of ytdl channels/videos to download from
     std::vector<std::string> download_list;
 
-    // string has value download that only
     if (!url.empty())
     {
         download_list.insert(download_list.begin(), url);

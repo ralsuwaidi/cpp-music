@@ -14,7 +14,8 @@ int main(int argc, char *argv[])
     // exit if no config file found
     if (!find_file(config_file))
     {
-        cout << "no config file found, please create a 'config.yaml' and run this command in the same dir" << endl;;
+        cout << "no config file found, please create a 'config.yaml' and run this command in the same dir" << endl;
+        ;
         return EXIT_SUCCESS;
     }
 
@@ -24,7 +25,8 @@ int main(int argc, char *argv[])
     // parse input
     if (argc > 1)
     {
-        argh::parser cmdl(argv);
+       
+        argh::parser cmdl(argc, argv, argh::parser::PREFER_PARAM_FOR_UNREG_OPTION);
 
         if (cmdl[{"-c", "--channels"}])
             std::cout << "Number of channels are: " << config.channel_num << endl;
@@ -49,7 +51,6 @@ int main(int argc, char *argv[])
             if (config.download_dir.empty())
             {
                 cout << "No download dir found in config file" << endl;
-                return EXIT_SUCCESS;
             }
             else
             {
@@ -65,19 +66,27 @@ int main(int argc, char *argv[])
             }
         }
 
-        if(cmdl[{"-p", "--post_download"}]){
-            if(!(config.post_download_commands->empty())){
+        if (cmdl[{"-p", "--post_download"}])
+        {
+            if (!(config.post_download_commands->empty()))
+            {
                 post_download_cmd(config.post_download_commands, config.command_num, config.logfile);
-            }else {
-                cout << "No post download command found in config" << endl;
-                return EXIT_SUCCESS;
             }
+            else
+            {
+                cout << "No post download command found in config" << endl;
+            }
+        }
+        if (!cmdl("--download").str().empty())
+        {
+
+            config.downloader(cmdl("--download").str());
 
         }
     }
     else
     {
-        // config.downloader("");
+        config.downloader("");
     }
 
     return EXIT_SUCCESS;
