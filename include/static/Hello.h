@@ -104,4 +104,6 @@ bool find_file(std::string file);
 
 void post_download_cmd(std::string* commands, int command_num, std::string logfile);
 
+void print_info(Mugo mugo);
+
 #endif

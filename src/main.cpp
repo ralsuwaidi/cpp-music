@@ -9,14 +9,23 @@ using namespace std;
 int main(int argc, char *argv[])
 {
 
+    argh::parser cmdl(argc, argv, argh::parser::PREFER_PARAM_FOR_UNREG_OPTION);
+
     string config_file = "config.yaml";
 
+    if (!cmdl("--config").str().empty())
+        config_file = cmdl("--config").str();
+
     // exit if no config file found
-    if (!find_file(config_file))
+    while (!find_file(config_file))
     {
-        cout << "no config file found, please create a 'config.yaml' and run this command in the same dir" << endl;
-        ;
-        return EXIT_SUCCESS;
+
+        cout << "no config file '" << config_file << "' found, please create a config file and run this command" << endl;
+
+        cout << "please enter config file name" << endl;
+
+        cin >> config_file;
+        cout << config_file << endl;
     }
 
     // get configuration from yaml file
@@ -25,8 +34,6 @@ int main(int argc, char *argv[])
     // parse input
     if (argc > 1)
     {
-       
-        argh::parser cmdl(argc, argv, argh::parser::PREFER_PARAM_FOR_UNREG_OPTION);
 
         if (cmdl[{"-c", "--channels"}])
             std::cout << "Number of channels are: " << config.channel_num << endl;
@@ -81,7 +88,6 @@ int main(int argc, char *argv[])
         {
 
             config.downloader(cmdl("--download").str());
-
         }
     }
     else

@@ -17,9 +17,9 @@ channels:
     - https://www.youtube.com/channel/UC9uLMAmdGQaeLPHAOqkYlrw # AnimeVibe (like syros)
     - https://www.youtube.com/user/DiavelNN                    # Diversity
 
-archive: /home/rashed/data/watch/music/downloaded.txt
+archive: /home/rashed/dev/cpp-music/music/downloaded.txt
 logfile: ~/.local/music.log
-download_dir: /home/rashed/data/watch/music/
+download_dir: /home/rashed/dev/cpp-music/music/
 post_download_commands:
     - docker exec -t beets /bin/bash -c "beet import -q /downloads/*" 
     - docker exec -t beets /bin/bash -c "beet ls -p added- | head -100 > /music/playlist/new.m3u; sed -i -e 's/^/\/data/' /music/playlist/new.m3u"

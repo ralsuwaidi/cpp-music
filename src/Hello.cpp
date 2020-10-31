@@ -35,6 +35,9 @@ void Mugo::downloader(std::string url)
         std::cout << "you have archive, saving to " << this->archive << std::endl;
     };
 
+    // print info
+    print_info(*this);
+
     // run download command
     for (int i = 0; i < download_list.size(); i++)
     {
@@ -63,12 +66,10 @@ void Mugo::downloader(std::string url)
 
         // run command
         system(str_cmd);
-
-        // post download command
-        post_download_cmd(this->post_download_commands, this->command_num, this->logfile);
     }
 
-
+    // post download command
+    post_download_cmd(this->post_download_commands, this->command_num, this->logfile);
 }
 
 int number_of_lines(std::string file)
@@ -95,7 +96,7 @@ bool find_file(std::string file)
     // std::cout << "Please enter file name with its extension" << std::endl;
     // std::string s;       //declaring string variable
     // std::cin >> s;       // taking string as input or file name with input
-    
+
     bool result = false; //declaring string variable and assign it to false.
     if ((directory = opendir(".")) != NULL)
     { // check if directory  open
@@ -126,8 +127,8 @@ bool find_file(std::string file)
     }
 }
 
-
-void post_download_cmd(std::string* commands, int command_num, std::string logfile){
+void post_download_cmd(std::string *commands, int command_num, std::string logfile)
+{
     // run post download commands
     if (commands)
     {
@@ -143,10 +144,33 @@ void post_download_cmd(std::string* commands, int command_num, std::string logfi
             system(command_with_log.c_str());
         }
 
-        if(!logfile.empty()){
+        if (!logfile.empty())
+        {
             std::cout << "log saved to " << logfile << std::endl;
         }
-    } else {
+    }
+    else
+    {
         std::cout << "No post download commands found" << std::endl;
+    }
+}
+
+void print_info(Mugo mugo)
+{
+    if (!mugo.logfile.empty())
+        std::cout << "logfile: " << mugo.logfile << std::endl;
+    if (!mugo.archive.empty())
+        std::cout << "archive: " << mugo.archive << std::endl;
+    if (!mugo.download_dir.empty())
+        std::cout << "download directory: " << mugo.download_dir << std::endl;
+    if (mugo.channel_num > 0)
+        std::cout << "number of channels: " << mugo.channel_num << std::endl;
+    if (mugo.command_num > 0)
+    {
+        for (int i = 0; i < mugo.command_num; i++)
+        {
+            std::cout << "post download command " << i << ": " << mugo.post_download_commands[i] << std::endl;
+            /* code */
+        }
     }
 }
